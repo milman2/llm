@@ -18,6 +18,12 @@ from langchain_core.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 # Load Document
+# - WebBaseLoader
+# - PyPDFLoader
+# - CSVLoader
+# - TextLoader
+# - DirectoryLoader
+# - PythonLoader
 loader = PyMuPDFLoader("data/SPRI_AI_Brief_2023년12월호_F.pdf")
 docs = loader.load()
 #print(f"문서의 페이지수: {len(docs)}")
@@ -25,11 +31,17 @@ docs = loader.load()
 #print(docs[10].__dict__)
 
 # Split Document into chunks
+# - CharacterTextSplitter
+# - RecursiveCharacterTextSplitter
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 chunks = text_splitter.split_documents(docs)
 #print(f"분할된 청크의수: {len(chunks)}")
 
 # Create Embeddings
+# - OpenAIEmbeddings
+# - GoogleGenerativeAIEmbeddings
+# - HuggingFaceEmbeddings
+# - FastEmbeddings
 # Google Gemini API 무료 할당량 소진 시 HuggingFace 임베딩 사용 (로컬 무료)
 # pip install sentence-transformers
 # pip install langchain-huggingface
@@ -49,7 +61,9 @@ embeddings = HuggingFaceEmbeddings(
 # from langchain_openai import OpenAIEmbeddings
 # embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
-# Create DB - FAISS, Chroma, Milvus, Pinecone, etc. -> 벡터 표현
+# Create DB - Vector Store
+# - FAISS
+# - Chroma
 # pip install faiss-gpu
 # pip install faiss-cpu
 vectorstore = FAISS.from_documents(documents=chunks, embedding=embeddings)
@@ -57,6 +71,10 @@ vectorstore = FAISS.from_documents(documents=chunks, embedding=embeddings)
 #    print(doc.page_content)
 
 # Create Retreiver
+# - search_type
+#   - similarity 
+#   - similarity_score_threshold
+#   - mmr
 retriever = vectorstore.as_retriever()
 #print(retriever.invoke("삼성전자가 자체 개발한 AI 의 이름은?"))
 
