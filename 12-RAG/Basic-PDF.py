@@ -49,7 +49,7 @@ embeddings = HuggingFaceEmbeddings(
 # from langchain_openai import OpenAIEmbeddings
 # embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
-# Create DB
+# Create DB - FAISS, Chroma, Milvus, Pinecone, etc. -> 벡터 표현
 # pip install faiss-gpu
 # pip install faiss-cpu
 vectorstore = FAISS.from_documents(documents=chunks, embedding=embeddings)
@@ -75,6 +75,9 @@ Answer in Korean.
 
 #Answer:"""
 )
+
+from langchain import hub
+prompt = hub.pull("rlm/rag-prompt")
 
 # LLM model
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, max_tokens=2048).bind(logprobs=True)
