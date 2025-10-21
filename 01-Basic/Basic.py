@@ -52,18 +52,32 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, max_tokens=2048).bind(logprobs=True)
-prompt = ChatPromptTemplate.from_template("What is the capital of {country}?")
-chain = prompt | llm | StrOutputParser()
-print(chain.invoke({"country": "France"})) # chain.stream(input)
 
-answer = llm.stream("대한민국의 아름다운 관광지 10곳과 주소를 알려주세요!")
-for token in answer:
-    print(token.content, end="", flush=True)
+# prompt = ChatPromptTemplate.from_template("What is the capital of {country}?")
+# chain = prompt | llm | StrOutputParser()
+# print(chain.invoke({"country": "France"})) # chain.stream(input)
+
+# answer = llm.stream("대한민국의 아름다운 관광지 10곳과 주소를 알려주세요!")
+# for token in answer:
+#     print(token.content, end="", flush=True)
 
 
 # Prompt Caching
 
 # Multi-modal model
+from langchain_core.messages import HumanMessage
+image_url = "https://raw.githubusercontent.com/teddylee777/langchain-kr/main/01-Basic/images/sample-image2.jpeg"
+message = HumanMessage(content=[
+    {
+        "type": "image_url",
+        "image_url": {"url": image_url}
+    },
+    {
+        "type": "text",
+        "text": "What is this image about?"
+    }
+])
+print(llm.invoke([message]).content)
 
 # LCEL interface : Runnable
 # stream, invoke, batch : 동기
