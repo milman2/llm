@@ -1,3 +1,4 @@
+# pip install dotenv
 from dotenv import load_dotenv
 import os
 
@@ -34,3 +35,27 @@ for package_name in [
         print(f"{package_name}: {package_version}")
     except ImportError:
         print(f"{package_name}: 설치되지 않음")
+
+# pip install langchain-openai
+# from langchain_openai import ChatOpenAI
+# from langchain_core.prompts import ChatPromptTemplate
+# from langchain_core.output_parsers import StrOutputParser
+
+# llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, max_tokens=2048).bind(logprobs=True)
+# prompt = ChatPromptTemplate.from_template("What is the capital of {country}?")
+# chain = prompt | llm | StrOutputParser()
+# print(chain.invoke({"country": "France"}))
+
+# pip install langchain-google-genai
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, max_tokens=2048).bind(logprobs=True)
+prompt = ChatPromptTemplate.from_template("What is the capital of {country}?")
+chain = prompt | llm | StrOutputParser()
+print(chain.invoke({"country": "France"}))
+
+answer = llm.stream("대한민국의 아름다운 관광지 10곳과 주소를 알려주세요!")
+for token in answer:
+    print(token.content, end="", flush=True)
